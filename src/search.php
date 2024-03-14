@@ -130,7 +130,8 @@
                     echo '<p>No results found.</p>';
                 }
             } catch(Exception $e) {
-                echo '<script>alert("There was an error with your input. Please try again.");</script>';
+                $error = $e->getMessage();
+                echo '<script>alert(' . json_encode($error) . ');</script>';
             }
         }
     ?>

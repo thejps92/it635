@@ -107,28 +107,29 @@
                     if($table === 'manufacturers') {
                         $stmt = $conn->prepare("INSERT INTO manufacturers (manufacturer_name, manufacturer_street, manufacturer_city, manufacturer_state, manufacturer_zip) VALUES (?, ?, ?, ?, ?)");
                         $stmt->execute([$_POST['manufacturer_name'], $_POST['manufacturer_street'], $_POST['manufacturer_city'], $_POST['manufacturer_state'], $_POST['manufacturer_zip']]);
-                    } elseif($table === 'retailers') {
+                    } else if($table === 'retailers') {
                         $stmt = $conn->prepare("INSERT INTO retailers (retailer_name, retailer_website) VALUES (?, ?)");
                         $stmt->execute([$_POST['retailer_name'], $_POST['retailer_website']]);
-                    } elseif($table === 'parts') {
+                    } else if($table === 'parts') {
                         $stmt = $conn->prepare("INSERT INTO parts (part_name, part_type, part_price, part_inventory, manufacturer_id, retailer_id) VALUES (?, ?, ?, ?, ?, ?)");
                         $stmt->execute([$_POST['part_name'], $_POST['part_type'], $_POST['part_price'], $_POST['part_inventory'], $_POST['manufacturer_id'], $_POST['retailer_id']]);
                     }
                     echo '<script>alert("Data inserted successfully.");</script>';
-                } elseif($action === 'delete') {
+                } else if($action === 'delete') {
                     $primaryKey = $_POST['primaryKey'];
                     if($table === 'manufacturers') {
                         $stmt = $conn->prepare("DELETE FROM manufacturers WHERE manufacturer_id = ?");
-                    } elseif($table === 'retailers') {
+                    } else if($table === 'retailers') {
                         $stmt = $conn->prepare("DELETE FROM retailers WHERE retailer_id = ?");
-                    } elseif($table === 'parts') {
+                    } else if($table === 'parts') {
                         $stmt = $conn->prepare("DELETE FROM parts WHERE part_id = ?");
                     }
                     $stmt->execute([$primaryKey]);
                     echo '<script>alert("Data deleted successfully.");</script>';
                 }
             } catch(Exception $e) {
-                echo '<script>alert("There was an error with your input. Please try again.");</script>';
+                $error = $e->getMessage();
+                echo '<script>alert(' . json_encode($error) . ');</script>';
             }
         }
     ?>
