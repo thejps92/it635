@@ -1,0 +1,33 @@
+services:
+  # Configuration for the web service
+  web:
+    # Builds the image using the Dockerfile in the current context
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # Maps port 8080 on the host to port 80 on the container
+    ports:
+      - "8080:80"
+    # Mounts the local ./src directory to /var/www/html in the container
+    volumes:
+      - ./src:/var/www/html
+    # Specifies that this service depends on the db service
+    depends_on:
+      - db
+
+  # Configuration for the db service
+  db:
+    # Uses the latest postgres image from Docker Hub
+    image: postgres:latest
+    # Sets environment variables for PostgreSQL database configuration
+    environment:
+      POSTGRES_DB: pcpartcatalog_db
+      POSTGRES_USER: pcpartcatalog_user
+      POSTGRES_PASSWORD: P@ssword123
+    # Maps port 5432 on the host to port 5432 on the container
+    ports:
+      - "5432:5432"
+    # Mounts the local directories to store PostgreSQL data and initialization SQL scripts
+    volumes:
+      - ./data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
